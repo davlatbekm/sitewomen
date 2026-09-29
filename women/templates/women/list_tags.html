@@ -1,0 +1,8 @@
+{% if tags %}
+
+ <h6 class="text-uppercase text-muted small fw-bold px-3 pt-3 mb-2">Tags</h6>
+{% for t in tags %}
+<a class="list-group-item " href="{{ t.get_absolute_url }}" >{{ t.tag }}</a>
+{% endfor %}
+
+{% endif %}

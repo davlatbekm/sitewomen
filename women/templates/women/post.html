@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+{% with post.tags.all as tags %}
+{% if tags %}
+<div class="mb-3">
+    <span class="text-muted small me-2">Tags:</span>
+    {% for t in tags %}
+    <a href="{{ t.get_absolute_url }}" class="btn btn-outline-primary btn-sm">{{ t.tag }}</a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+        <h1 class="mb-3">{{ post.title }}</h1>
+
+        <p class="text-muted mb-3">
+            <span class="badge bg-secondary">{{ post.cat }}</span>
+            Last update: {{ post.time_updated|date:"d-m-Y H:i" }}
+        </p>
+
+        {% if post.photo %}
+        <img src="{{ post.photo.url }}"
+             class="img-fluid rounded mb-4"
+             style="max-height: 420px; width: 100%; object-fit: cover;"
+             alt="{{ post.title }}">
+        {% endif %}
+
+        <div class="fs-5" style="line-height: 1.7;">
+            {{ post.content|linebreaks }}
+        </div>
+        {% if perms.women.change_women %}
+        <p><a href="{% url 'edit' post.id %}" class="btn btn-outline-warning">Edit post</a></p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

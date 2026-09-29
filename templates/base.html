@@ -1,0 +1,91 @@
+{% load static %}
+{% load women_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'women/css/style.css' %}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+{% block mainmenu %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary text-bg-secondary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                </li>
+                {% get_menu as menu %}
+                {% for i in menu %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url i.url_name %}">{{ i.title }}</a>
+                </li>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                <form action="{% url 'users:logout' %}" method="post" >
+                    {% csrf_token %}
+                <li class="nav-item">
+                    <button class="nav-link" type="submit">Logout | {{ user.username }}</button>
+                </li>
+                    </form>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
+                </li>
+                {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:register' %}">Sign in</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-2 bg-light border-end vh-100 sticky-top">
+            <h6 class="text-uppercase text-muted small fw-bold px-3 pt-3 mb-2">Categories</h6>
+
+            <ul class="list-group list-group-item-action mt-3">
+
+                {% show_category cat_selected %}
+
+            </ul>
+            <ul class="list-group list-group-item-action mt-3">
+                {% show_all_tags %}
+
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <div class="row">
+                {% block breadcrumbs %}
+                {% endblock %}
+
+                {% block content %}
+                {% endblock %}
+
+                {% block navigation %}
+                {% endblock %}
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

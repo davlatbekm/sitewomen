@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <p>Profile</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if user.photo %}
+            <div class="text-center mb-4">
+    <img src="{{ user.photo.url }}" alt="Profile picture" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+            </div>
+            {% else %}
+    <div class="text-center mb-4">
+    <img src="{{ default_image }}" alt="Profile picture" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+            </div>
+            {% endif %}
+
+
+            <input type="hidden" name="next" class="form-control" value="{{ next }}">
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show w-75" role="alert">
+                {{ form.non_field_errors }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% for f in form %}
+            <p><label for="{{ f.id_for_labal }}">{{ f.label }}</label>{{ f }}</p>
+            {% if f.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ f.errors }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+            <p>
+                <button type="submit" class="btn btn-primary w-75">Save</button>
+            </p>
+        </form>
+        <hr>
+        <p><a href="{% url 'users:password_change'%}" class="btn btn-primary">Change password</a></p>
+    </div>
+</div>
+
+{% endblock %}
